@@ -1,0 +1,559 @@
+/* --- Global & Body --- */
+body {
+  margin: 0;
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  /* Use Flexbox to center the entire app on the page */
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.App {
+  width: 100%;
+  max-width: 700px; /* Set the max-width for all content here */
+  text-align: center;
+}
+
+main {
+  width: 100%;
+}
+
+/* --- Header --- */
+.App-header {
+  background-color: #1f1f1f;
+  padding: 20px;
+  color: white;
+  margin-bottom: 2rem;
+  border-bottom: 4px solid #00a8e8;
+  border-radius: 12px 12px 0 0;
+}
+
+/* --- Navigation --- */
+.main-nav {
+  margin-bottom: 2rem;
+}
+
+.main-nav a {
+  margin: 0 1rem;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: #00a8e8;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.main-nav a:hover {
+  background-color: rgba(0, 168, 232, 0.15);
+}
+
+/* --- Main Content Cards --- */
+.add-movie-form,
+.movie-list,
+.history-page,
+.admin-controls,
+.countdown,
+.scrap-submission-area,
+.user-selection-area,
+.end-week-section,
+.vote-submission-area,
+.tie-breaker-message {
+  padding: 1.5rem;
+  border: 1px solid #333;
+  border-radius: 12px;
+  text-align: left;
+  background-color: #1e1e1e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+}
+
+.add-movie-form h2,
+.movie-list h2,
+.history-page h2 {
+  text-align: center;
+  color: #ffffff;
+}
+
+/* --- Form Elements --- */
+.add-movie-form input {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.add-movie-form input:focus {
+  outline: none;
+  border-color: #00a8e8;
+}
+
+.add-movie-form button {
+  display: block;
+  width: 50%;
+  margin: 10px auto 0 auto;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: none;
+  background-color: #00a8e8;
+  color: #121212;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.add-movie-form button:hover:not(:disabled) {
+  background-color: #007ea7;
+}
+
+/* --- Movie & History Items --- */
+.movie-item,
+.archived-week-item {
+  border-bottom: 1px solid #333;
+  padding: 1rem 0;
+}
+
+.movie-item:last-child,
+.archived-week-item:last-child {
+  border-bottom: none;
+}
+
+.movie-item h3 {
+  margin: 0 0 0.5rem 0;
+  color: #00a8e8;
+}
+
+.rating {
+  margin-top: 10px;
+}
+
+.rating button {
+  margin: 0 3px;
+  padding: 5px 10px;
+  border: 1px solid #555;
+  background-color: #333;
+  color: #e0e0e0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.rating button:hover:not(:disabled) {
+  background-color: #444;
+  border-color: #777;
+}
+
+.winner {
+  font-weight: bold;
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.15);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* --- End Week Section --- */
+.end-week-section {
+  text-align: center;
+}
+
+.end-week-section label {
+  margin-right: 10px;
+  font-weight: bold;
+  color: #e0e0e0;
+}
+
+.end-week-section input[type="date"] {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  margin-right: 15px;
+  color-scheme: dark;
+}
+
+.end-week-button {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  background-color: #d7263d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.end-week-button:hover:not(:disabled) {
+  background-color: #a11d2d;
+}
+
+.end-week-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* --- History Page --- */
+.history-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+.history-page li {
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  border-left: 4px solid #333;
+}
+
+.month-group {
+  margin-bottom: 1rem;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.month-header {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  cursor: pointer;
+  padding: 1rem;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+.month-header:hover {
+  background-color: #383838;
+}
+
+.chevron {
+  transition: transform 0.3s ease;
+}
+
+.chevron.expanded {
+  transform: rotate(180deg);
+}
+
+.weeks-container {
+  padding: 0 1rem 1rem 1rem;
+  background-color: #1e1e1e;
+}
+
+.weeks-container .archived-week-item {
+  border-bottom: 1px solid #333;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.weeks-container .archived-week-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* --- User Selection --- */
+.user-selection-area {
+  text-align: center;
+}
+
+.user-selection-area label {
+  margin-right: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.user-selection-area select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* --- Rating Button States --- */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.rating button:disabled {
+    background-color: #444;
+}
+
+.vote-receipt {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #00a8e8;
+}
+
+/* --- Locked State Styles --- */
+.locked-average {
+  font-style: italic;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* --- Submission Status Styles --- */
+.submission-status h2 {
+  color: #e0e0e0;
+  text-align: center;
+}
+
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.status-submitted {
+  background-color: rgba(40, 167, 69, 0.15);
+  color: #a3d9b1;
+  border-left: 4px solid #28a745;
+}
+
+.status-pending {
+  background-color: rgba(215, 38, 61, 0.1);
+  color: #e5a0a8;
+  border-left: 4px solid #d7263d;
+}
+
+/* --- Voted Button Style --- */
+.rating button.voted-by-user {
+  background-color: #00a8e8;
+  color: #121212;
+  border-color: #00a8e8;
+  font-weight: bold;
+  opacity: 1;
+}
+
+/* --- Vote Submission Styles --- */
+.vote-submission-area {
+  text-align: center;
+}
+
+.vote-submission-area button {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, opacity 0.3s;
+}
+
+.vote-submission-area button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.vote-submission-area button:disabled {
+  background-color: #555;
+  opacity: 0.7;
+}
+
+.votes-submitted-message {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* --- Ranked Results Styles --- */
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rank-badge {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #888;
+  min-width: 30px;
+  text-align: center;
+}
+
+.winner-item {
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  transform: scale(1.02);
+}
+
+.winner-item .rank-badge {
+  color: #ffd700;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.winner-item .rank-badge::before {
+  content: '🏆';
+  margin-right: 0.5rem;
+}
+
+/* --- History Page Submitted By Style --- */
+.submitted-by-history {
+  font-style: italic;
+  color: #888;
+  font-size: 0.9em;
+}
+
+/* --- Scrap Submission Styles --- */
+.scrap-submission-area {
+  text-align: center;
+}
+
+.scrap-submission-area p {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.scrap-button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background-color: #d7263d;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.scrap-button:hover {
+  background-color: #a11d2d;
+}
+
+/* --- Pending Voters & Tie-Breaker Styles --- */
+.pending-voters-list {
+  color: #e5a0a8;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+
+.tie-breaker-message {
+  text-align: center;
+}
+
+/* --- Admin Controls --- */
+.admin-controls {
+  text-align: center;
+}
+
+.admin-controls h3 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+.admin-controls input[type="datetime-local"] {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  margin-right: 15px;
+  color-scheme: dark;
+}
+
+.admin-controls button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background-color: #00a8e8;
+  color: #121212;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin-left: 10px;
+}
+
+.admin-controls button:hover {
+  background-color: #007ea7;
+}
+
+/* --- Countdown Timer --- */
+.countdown {
+  text-align: center;
+}
+
+.countdown h3 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+.countdown p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00a8e8;
+  margin-bottom: 0;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Admin Controls Absence Section --- */
+.admin-section {
+  border-top: 1px solid #444;
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.absence-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.absence-checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+/* --- Absent User Status Style --- */
+.status-absent {
+  background-color: rgba(45, 52, 82, 0.5); /* Night time blue */
+  color: #a9b0d3;
+  border-left: 4px solid #2d3452;
+  font-style: italic;
+}
