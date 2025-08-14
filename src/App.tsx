@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Routes, Route } from 'react-router-dom';
-import type { Movie, ArchivedWeek, UserVote } from './interfaces';
+import type { Movie, UserVote } from './interfaces';
 import Layout from './components/Layout';
 import WeeklyPage from './pages/WeeklyPage';
 import HistoryPage from './pages/HistoryPage';
