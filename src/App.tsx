@@ -111,37 +111,36 @@ function App() {
 
     fetchInitialData();
 
-    // --- REAL-TIME SUBSCRIPTION ---
-    const channel = supabase
-      .channel('weekly_state_changes')
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'weekly_state' },
-        (payload) => {
-          console.log('Change received!', payload);
-          const newState = payload.new;
-          
-          let winnerMovie = null;
-          if (newState.winner_id) {
-              winnerMovie = appState.currentMovies.find(m => m.id === newState.winner_id) || null;
-          }
+    // --- POLLING FOR UPDATES ---
+    const pollInterval = setInterval(async () => {
+      // Only poll for weekly state updates, not movies (they change less frequently)
+      const { data: weeklyState, error } = await supabase
+        .from('weekly_state')
+        .select('*')
+        .eq('id', 1)
+        .single();
 
-          setAppState(prevState => ({
-            ...prevState,
-            absentUsers: newState.absent_users || [],
-            submissionDeadline: newState.submission_deadline,
-            areSubmissionsComplete: newState.are_submissions_complete,
-            submittedVotes: newState.submitted_votes || [],
-            tieBreakerUser: newState.tie_breaker_user,
-            winner: winnerMovie
-          }));
+      if (!error && weeklyState) {
+        let winnerMovie = null;
+        if (weeklyState.winner_id) {
+          winnerMovie = appState.currentMovies.find(m => m.id === weeklyState.winner_id) || null;
         }
-      )
-      .subscribe();
 
-    // Cleanup subscription on component unmount
+        setAppState(prevState => ({
+          ...prevState,
+          absentUsers: weeklyState.absent_users || [],
+          submissionDeadline: weeklyState.submission_deadline,
+          areSubmissionsComplete: weeklyState.are_submissions_complete,
+          submittedVotes: weeklyState.submitted_votes || [],
+          tieBreakerUser: weeklyState.tie_breaker_user,
+          winner: winnerMovie
+        }));
+      }
+    }, 5000); // Poll every 5 seconds
+
+    // Cleanup polling on component unmount
     return () => {
-      supabase.removeChannel(channel);
+      clearInterval(pollInterval);
     };
 
   }, [appState.currentMovies]);
