@@ -6,9 +6,11 @@ interface AdminControlsProps {
   endSubmissions: () => void;
   updateUserAbsence: (userId: string, isAbsent: boolean) => void;
   absentUsers: string[];
+  resetUserVote: (userId: string) => Promise<void>;
+  submittedVotes: string[];
 }
 
-export default function AdminControls({ setSubmissionDeadline, endSubmissions, updateUserAbsence, absentUsers }: AdminControlsProps) {
+export default function AdminControls({ setSubmissionDeadline, endSubmissions, updateUserAbsence, absentUsers, resetUserVote, submittedVotes }: AdminControlsProps) {
   const [deadline, setDeadline] = useState('');
 
   const handleSetDeadline = () => {
@@ -16,6 +18,13 @@ export default function AdminControls({ setSubmissionDeadline, endSubmissions, u
       setSubmissionDeadline(deadline);
     } else {
       alert('Please select a date and time.');
+    }
+  };
+
+  const handleResetVote = (userId: string) => {
+    const userName = USERS[userId].name;
+    if (confirm(`Reset ${userName}'s vote? They will be able to vote again.`)) {
+      resetUserVote(userId);
     }
   };
 
@@ -44,6 +53,25 @@ export default function AdminControls({ setSubmissionDeadline, endSubmissions, u
               {user.name}
             </label>
           ))}
+        </div>
+      </div>
+      <div className="admin-section">
+        <h4>Reset User Votes</h4>
+        <div className="vote-reset-buttons">
+          {['user-1', 'user-2', 'user-3', 'user-4', 'user-5'].map(userId => {
+            const user = USERS[userId];
+            const hasVoted = submittedVotes.includes(userId);
+            return (
+              <button
+                key={userId}
+                onClick={() => handleResetVote(userId)}
+                disabled={!hasVoted}
+                className={`vote-reset-button ${hasVoted ? 'voted' : 'not-voted'}`}
+              >
+                Reset {user.name} {hasVoted ? '✓' : ''}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

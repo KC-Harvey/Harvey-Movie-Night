@@ -28,10 +28,11 @@ interface WeeklyPageProps {
   pickWinner: () => void;
   updateUserAbsence: (userId: string, isAbsent: boolean) => void;
   absentUsers: string[];
+  resetUserVote: (userId: string) => Promise<void>;
 }
 
 export default function WeeklyPage({
-  movies, submittedVotes, tieBreakerUser, onAddMovie, onScrapMovie, onAddRating, onRemoveRating, onSubmitVotes, onEndWeek, currentUser, setCurrentUser, submissionDeadline, setSubmissionDeadline, areSubmissionsComplete, endSubmissions, isKcAuthenticated, authenticateKc, winner, pickWinner, updateUserAbsence, absentUsers,
+  movies, submittedVotes, tieBreakerUser, onAddMovie, onScrapMovie, onAddRating, onRemoveRating, onSubmitVotes, onEndWeek, currentUser, setCurrentUser, submissionDeadline, setSubmissionDeadline, areSubmissionsComplete, endSubmissions, isKcAuthenticated, authenticateKc, winner, pickWinner, updateUserAbsence, absentUsers, resetUserVote,
 }: WeeklyPageProps) {
   const [movieNightDate, setMovieNightDate] = useState(new Date().toISOString().split('T')[0]);
 
@@ -92,6 +93,8 @@ export default function WeeklyPage({
           endSubmissions={endSubmissions}
           updateUserAbsence={updateUserAbsence}
           absentUsers={absentUsers}
+          resetUserVote={resetUserVote}
+          submittedVotes={submittedVotes}
         />
       )}
 

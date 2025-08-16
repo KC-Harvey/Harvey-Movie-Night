@@ -164,6 +164,11 @@ function App() {
     await updateWeeklyState({ absent_users: updatedAbsentUsers });
   };
 
+  const resetUserVote = async (userId: string) => {
+    const updatedSubmittedVotes = appState.submittedVotes.filter(id => id !== userId);
+    await updateWeeklyState({ submitted_votes: updatedSubmittedVotes });
+  };
+
   const authenticateKc = (pin: string): boolean => {
     if (pin === '7879') {
       setAppState(prevState => ({ ...prevState, isKcAuthenticated: true }));
@@ -345,6 +350,7 @@ function App() {
                 winner={appState.winner}
                 pickWinner={pickWinner}
                 updateUserAbsence={updateUserAbsence}
+                resetUserVote={resetUserVote}
                 absentUsers={appState.absentUsers}
               />
             }
