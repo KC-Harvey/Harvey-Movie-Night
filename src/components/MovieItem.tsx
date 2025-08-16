@@ -68,8 +68,8 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
             })}
           </div>
           <div className="rating-labels">
-            <span className="locked-average rating-label-lowest">lowest</span>
-            <span className="locked-average rating-label-highest">highest</span>
+            <span className="locked-average rating-label-lowest">lowest interest</span>
+            <span className="locked-average rating-label-highest">highest interest</span>
           </div>
         </div>
         {currentUserVoteForThisMovie && (
