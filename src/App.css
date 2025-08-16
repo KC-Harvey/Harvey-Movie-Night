@@ -568,21 +568,7 @@ button:disabled {
 }
 
 .rating-labels {
-  position: relative;
-  height: 1.2rem;
+  display: flex;
+  justify-content: space-between;
   margin-top: 0.25rem;
-}
-
-.rating-label-lowest {
-  position: absolute;
-  left: 0;
-  text-align: center;
-  width: 40px; /* Approximate button width */
-}
-
-.rating-label-highest {
-  position: absolute;
-  right: 0;
-  text-align: center;
-  width: 40px; /* Approximate button width */
 }
