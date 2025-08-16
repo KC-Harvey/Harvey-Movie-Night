@@ -38,7 +38,7 @@ export default function WeeklyPage({
 
   const submittedMovieUserIds = new Set(movies.map(m => m.submittedBy));
   const activeUsers = Object.keys(USERS).filter(id => !absentUsers.includes(id));
-  const activePrimaryUsers = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5'].filter(id => !absentUsers.includes(id));
+  const activePrimaryUsers = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5', 'user-6'].filter(id => !absentUsers.includes(id));
 
   const allActiveUsersSubmitted = activeUsers.every(id => submittedMovieUserIds.has(id));
   const isDeadlineReached = submissionDeadline ? new Date() > new Date(submissionDeadline) : false;

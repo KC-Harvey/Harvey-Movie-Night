@@ -202,7 +202,7 @@ function App() {
     const potentialWinners = sortedMovies.filter(m => m.averageRating === topScore);
 
     if (potentialWinners.length > 1 && typeof topScore === 'number' && topScore > 0) {
-      const primaryVoters = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5'].filter(id => !appState.absentUsers.includes(id));
+      const primaryVoters = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5', 'user-6'].filter(id => !appState.absentUsers.includes(id));
       if (primaryVoters.length > 0) {
         const tieBreakerId = primaryVoters[Math.floor(Math.random() * primaryVoters.length)];
         tieBreakerName = USERS[tieBreakerId].name;

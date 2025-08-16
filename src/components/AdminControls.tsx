@@ -58,7 +58,7 @@ export default function AdminControls({ setSubmissionDeadline, endSubmissions, u
       <div className="admin-section">
         <h4>Reset User Votes</h4>
         <div className="vote-reset-buttons">
-          {['user-1', 'user-2', 'user-3', 'user-4', 'user-5'].map(userId => {
+          {['user-1', 'user-2', 'user-3', 'user-4', 'user-5', 'user-6'].map(userId => {
             const user = USERS[userId];
             const hasVoted = submittedVotes.includes(userId);
             return (
