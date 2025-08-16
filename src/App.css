@@ -557,3 +557,32 @@ button:disabled {
   border-left: 4px solid #2d3452;
   font-style: italic;
 }
+
+/* --- Rating Labels --- */
+.rating-container {
+  position: relative;
+}
+
+.rating-buttons {
+  display: inline-block;
+}
+
+.rating-labels {
+  position: relative;
+  height: 1.2rem;
+  margin-top: 0.25rem;
+}
+
+.rating-label-lowest {
+  position: absolute;
+  left: 0;
+  text-align: center;
+  width: 40px; /* Approximate button width */
+}
+
+.rating-label-highest {
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 40px; /* Approximate button width */
+}

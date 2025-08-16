@@ -48,7 +48,7 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
           </p>
         )}
 
-        <div>
+        <div className="rating-container">
           <div className="rating-buttons">
             {Array.from({ length: numberOfMovies }, (_, i) => i + 1).map((ratingValue) => {
               const isVotedByUser = currentUserVoteForThisMovie === ratingValue;
@@ -56,19 +56,20 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
               const buttonClass = isVotedByUser ? 'voted-by-user' : '';
 
               return (
-                <div key={ratingValue} className="rating-button-container">
-                  <button 
-                    onClick={() => handleVoteClick(ratingValue)}
-                    disabled={isRatingUsedElsewhere || !areSubmissionsComplete || hasUserSubmittedVotes}
-                    className={buttonClass}
-                  >
-                    {ratingValue}
-                  </button>
-                  {ratingValue === 1 && <span className="rating-label">lowest</span>}
-                  {ratingValue === numberOfMovies && <span className="rating-label">highest</span>}
-                </div>
+                <button 
+                  key={ratingValue} 
+                  onClick={() => handleVoteClick(ratingValue)}
+                  disabled={isRatingUsedElsewhere || !areSubmissionsComplete || hasUserSubmittedVotes}
+                  className={buttonClass}
+                >
+                  {ratingValue}
+                </button>
               );
             })}
+          </div>
+          <div className="rating-labels">
+            <span className="locked-average rating-label-lowest">lowest</span>
+            <span className="locked-average rating-label-highest">highest</span>
           </div>
         </div>
         {currentUserVoteForThisMovie && (
