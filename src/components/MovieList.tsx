@@ -81,7 +81,23 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
             </div>
           )}
           
-          {sortedMovies.map((movie, index) => (
+          {!hasUserSubmittedVotes && sortedMovies.map((movie, index) => (
+            <MovieItem
+              key={movie.id}
+              movie={movie}
+              onAddRating={onAddRating}
+              onRemoveRating={onRemoveRating}
+              currentUser={currentUser}
+              userVotes={userVotes}
+              areSubmissionsComplete={areSubmissionsComplete}
+              areAllVotesSubmitted={areAllVotesSubmitted}
+              hasUserSubmittedVotes={hasUserSubmittedVotes}
+              rank={winner ? (winner.id === movie.id ? 1 : undefined) : (areAllVotesSubmitted ? index + 1 : undefined)}
+              numberOfMovies={movies.length}
+            />
+          ))}
+          
+          {hasUserSubmittedVotes && areAllVotesSubmitted && sortedMovies.map((movie, index) => (
             <MovieItem
               key={movie.id}
               movie={movie}
