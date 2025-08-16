@@ -44,27 +44,32 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
            <p>Final Score: {movie.averageRating.toFixed(1)}</p>
         ) : (
           <p className="locked-average">
-            {!areSubmissionsComplete ? 'Voting is locked' : 'Results hidden until all votes are submitted'}
+            {!areSubmissionsComplete ? 'Voting is locked' : ''}
           </p>
         )}
 
         <div>
-          {Array.from({ length: numberOfMovies }, (_, i) => i + 1).map((ratingValue) => {
-            const isVotedByUser = currentUserVoteForThisMovie === ratingValue;
-            const isRatingUsedElsewhere = userVotes.includes(ratingValue) && !isVotedByUser;
-            const buttonClass = isVotedByUser ? 'voted-by-user' : '';
+          <div className="rating-buttons">
+            {Array.from({ length: numberOfMovies }, (_, i) => i + 1).map((ratingValue) => {
+              const isVotedByUser = currentUserVoteForThisMovie === ratingValue;
+              const isRatingUsedElsewhere = userVotes.includes(ratingValue) && !isVotedByUser;
+              const buttonClass = isVotedByUser ? 'voted-by-user' : '';
 
-            return (
-              <button 
-                key={ratingValue} 
-                onClick={() => handleVoteClick(ratingValue)}
-                disabled={isRatingUsedElsewhere || !areSubmissionsComplete || hasUserSubmittedVotes}
-                className={buttonClass}
-              >
-                {ratingValue}
-              </button>
-            );
-          })}
+              return (
+                <div key={ratingValue} className="rating-button-container">
+                  <button 
+                    onClick={() => handleVoteClick(ratingValue)}
+                    disabled={isRatingUsedElsewhere || !areSubmissionsComplete || hasUserSubmittedVotes}
+                    className={buttonClass}
+                  >
+                    {ratingValue}
+                  </button>
+                  {ratingValue === 1 && <span className="rating-label">lowest</span>}
+                  {ratingValue === numberOfMovies && <span className="rating-label">highest</span>}
+                </div>
+              );
+            })}
+          </div>
         </div>
         {currentUserVoteForThisMovie && (
           <p className="vote-receipt">You voted: {currentUserVoteForThisMovie}</p>
