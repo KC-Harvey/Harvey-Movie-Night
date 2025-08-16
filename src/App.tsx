@@ -165,8 +165,21 @@ function App() {
   };
 
   const resetUserVote = async (userId: string) => {
+    // Remove user from submitted votes tracking
     const updatedSubmittedVotes = appState.submittedVotes.filter(id => id !== userId);
     await updateWeeklyState({ submitted_votes: updatedSubmittedVotes });
+    
+    // Delete all ratings by this user
+    const { error } = await supabase.from('ratings').delete().match({ user_id: userId });
+    if (error) {
+      console.error('Error deleting user ratings:', error);
+    } else {
+      // Refresh all movies to update averages
+      const movieIds = appState.currentMovies.map(m => m.id);
+      for (const movieId of movieIds) {
+        await refetchMovie(movieId);
+      }
+    }
   };
 
   const authenticateKc = (pin: string): boolean => {
