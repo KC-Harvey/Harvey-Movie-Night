@@ -27,41 +27,48 @@ export default function HistoryPage() {
   useEffect(() => {
     const fetchHistory = async () => {
       setIsLoading(true);
-      // Fetch archived weeks and all related movies for each week
-      const { data, error } = await supabase
+      
+      // First, fetch archived weeks
+      const { data: archivedWeeks, error: weeksError } = await supabase
         .from('archived_weeks')
-        .select(`
-          id,
-          date,
-          winner_id,
-          movies (
-            id,
-            title,
-            submitted_by,
-            average_rating
-          )
-        `)
-        .order('date', { ascending: false }); // Order by date descending
+        .select('id, date, winner_id')
+        .order('date', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching history:', error);
-        // Handle the error in the UI if needed
-      } else {
-        // Process the data to match the ArchivedWeek interface
-        const processedHistory = data.map((week: any) => ({
-            ...week,
-            winnerId: week.winner_id,
-            movies: week.movies.map((movie: any) => ({
-                ...movie,
-                submittedBy: movie.submitted_by,
-                averageRating: movie.average_rating,
-                // Add dummy values for fields not fetched if needed by other components
-                trailerLink: '',
-                ratings: {},
-            }))
-        }));
-        setHistory(processedHistory);
+      if (weeksError) {
+        console.error('Error fetching archived weeks:', weeksError);
+        setIsLoading(false);
+        return;
       }
+
+      // For each archived week, fetch its movies
+      const processedHistory = [];
+      for (const week of archivedWeeks || []) {
+        const { data: movies, error: moviesError } = await supabase
+          .from('movies')
+          .select('id, title, submitted_by, average_rating, trailer_link')
+          .eq('archived_week_id', week.id);
+
+        if (moviesError) {
+          console.error('Error fetching movies for week:', week.id, moviesError);
+          continue;
+        }
+
+        processedHistory.push({
+          id: week.id,
+          date: week.date,
+          winnerId: week.winner_id,
+          movies: (movies || []).map((movie: any) => ({
+            id: movie.id,
+            title: movie.title,
+            submittedBy: movie.submitted_by,
+            averageRating: movie.average_rating || 0,
+            trailerLink: movie.trailer_link || '',
+            ratings: {},
+          }))
+        });
+      }
+      
+      setHistory(processedHistory);
       setIsLoading(false);
     };
 
