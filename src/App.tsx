@@ -220,6 +220,42 @@ function App() {
     }
   };
 
+  const resetWeek = async () => {
+    if (!confirm("Are you sure you want to reset the current week? This will delete all movies and votes for this week and cannot be undone.")) {
+      return;
+    }
+
+    // Delete all current movies and their ratings
+    const movieIds = appState.currentMovies.map(m => m.id);
+    if (movieIds.length > 0) {
+      await supabase.from('ratings').delete().in('movie_id', movieIds);
+      await supabase.from('movies').delete().in('id', movieIds);
+    }
+
+    // Reset the weekly state for a fresh week
+    await updateWeeklyState({
+      absent_users: [],
+      submission_deadline: getNextSaturday(),
+      are_submissions_complete: false,
+      submitted_votes: [],
+      tie_breaker_user: null,
+      winner_id: null
+    });
+
+    // Reset client-side state
+    setAppState(prevState => ({
+      ...prevState,
+      currentMovies: [],
+      submittedVotes: [],
+      tieBreakerUser: null,
+      winner: null,
+      absentUsers: [],
+      areSubmissionsComplete: false,
+    }));
+
+    alert("Week has been reset successfully!");
+  };
+
   const endWeekAndArchive = async (date: string) => {
     if (!appState.winner) {
         alert("A winner must be picked before archiving the week.");
@@ -354,6 +390,7 @@ function App() {
                 updateUserAbsence={updateUserAbsence}
                 absentUsers={appState.absentUsers}
                 resetUserVote={resetUserVote}
+                resetWeek={resetWeek}
               />
             }
           />
