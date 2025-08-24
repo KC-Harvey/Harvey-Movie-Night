@@ -30,7 +30,7 @@ const getNextSaturday = () => {
 
 
 function App() {
-  const [currentUser, setCurrentUser] = useState<string>('user-1');
+  const [currentUser, setCurrentUser] = useState<string>('');
   const [appState, setAppState] = useState<{
     currentMovies: Movie[];
     submittedVotes: string[];
@@ -111,36 +111,37 @@ function App() {
 
     fetchInitialData();
 
-    // --- POLLING FOR UPDATES ---
-    const pollInterval = setInterval(async () => {
-      // Only poll for weekly state updates, not movies (they change less frequently)
-      const { data: weeklyState, error } = await supabase
-        .from('weekly_state')
-        .select('*')
-        .eq('id', 1)
-        .single();
+    // --- REAL-TIME SUBSCRIPTION ---
+    const channel = supabase
+      .channel('weekly_state_changes')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'weekly_state' },
+        (payload) => {
+          console.log('Change received!', payload);
+          const newState = payload.new;
+          
+          let winnerMovie = null;
+          if (newState.winner_id) {
+              winnerMovie = appState.currentMovies.find(m => m.id === newState.winner_id) || null;
+          }
 
-      if (!error && weeklyState) {
-        let winnerMovie = null;
-        if (weeklyState.winner_id) {
-          winnerMovie = appState.currentMovies.find(m => m.id === weeklyState.winner_id) || null;
+          setAppState(prevState => ({
+            ...prevState,
+            absentUsers: newState.absent_users || [],
+            submissionDeadline: newState.submission_deadline,
+            areSubmissionsComplete: newState.are_submissions_complete,
+            submittedVotes: newState.submitted_votes || [],
+            tieBreakerUser: newState.tie_breaker_user,
+            winner: winnerMovie
+          }));
         }
+      )
+      .subscribe();
 
-        setAppState(prevState => ({
-          ...prevState,
-          absentUsers: weeklyState.absent_users || [],
-          submissionDeadline: weeklyState.submission_deadline,
-          areSubmissionsComplete: weeklyState.are_submissions_complete,
-          submittedVotes: weeklyState.submitted_votes || [],
-          tieBreakerUser: weeklyState.tie_breaker_user,
-          winner: winnerMovie
-        }));
-      }
-    }, 5000); // Poll every 5 seconds
-
-    // Cleanup polling on component unmount
+    // Cleanup subscription on component unmount
     return () => {
-      clearInterval(pollInterval);
+      supabase.removeChannel(channel);
     };
 
   }, [appState.currentMovies]);
@@ -162,24 +163,6 @@ function App() {
       ? [...appState.absentUsers, userId]
       : appState.absentUsers.filter(id => id !== userId);
     await updateWeeklyState({ absent_users: updatedAbsentUsers });
-  };
-
-  const resetUserVote = async (userId: string) => {
-    // Remove user from submitted votes tracking
-    const updatedSubmittedVotes = appState.submittedVotes.filter(id => id !== userId);
-    await updateWeeklyState({ submitted_votes: updatedSubmittedVotes });
-    
-    // Delete all ratings by this user
-    const { error } = await supabase.from('ratings').delete().match({ user_id: userId });
-    if (error) {
-      console.error('Error deleting user ratings:', error);
-    } else {
-      // Refresh all movies to update averages
-      const movieIds = appState.currentMovies.map(m => m.id);
-      for (const movieId of movieIds) {
-        await refetchMovie(movieId);
-      }
-    }
   };
 
   const authenticateKc = (pin: string): boolean => {
@@ -215,7 +198,7 @@ function App() {
     const potentialWinners = sortedMovies.filter(m => m.averageRating === topScore);
 
     if (potentialWinners.length > 1 && typeof topScore === 'number' && topScore > 0) {
-      const primaryVoters = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5', 'user-6'].filter(id => !appState.absentUsers.includes(id));
+      const primaryVoters = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5'].filter(id => !appState.absentUsers.includes(id));
       if (primaryVoters.length > 0) {
         const tieBreakerId = primaryVoters[Math.floor(Math.random() * primaryVoters.length)];
         tieBreakerName = USERS[tieBreakerId].name;
@@ -332,6 +315,12 @@ function App() {
       }
   };
 
+  // Add the resetUserVote function
+  const resetUserVote = async (movieId: string) => {
+    // Remove the current user's rating for the specified movie
+    await removeRating(movieId);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -363,8 +352,8 @@ function App() {
                 winner={appState.winner}
                 pickWinner={pickWinner}
                 updateUserAbsence={updateUserAbsence}
-                resetUserVote={resetUserVote}
                 absentUsers={appState.absentUsers}
+                resetUserVote={resetUserVote}
               />
             }
           />

@@ -8,9 +8,10 @@ interface AdminControlsProps {
   absentUsers: string[];
   resetUserVote: (userId: string) => Promise<void>;
   submittedVotes: string[];
+  resetWeek: () => void;
 }
 
-export default function AdminControls({ setSubmissionDeadline, endSubmissions, updateUserAbsence, absentUsers, resetUserVote, submittedVotes }: AdminControlsProps) {
+export default function AdminControls({ setSubmissionDeadline, endSubmissions, updateUserAbsence, absentUsers, resetUserVote, submittedVotes, resetWeek }: AdminControlsProps) {
   const [deadline, setDeadline] = useState('');
 
   const handleSetDeadline = () => {
@@ -39,6 +40,7 @@ export default function AdminControls({ setSubmissionDeadline, endSubmissions, u
         />
         <button onClick={handleSetDeadline}>Set Deadline</button>
         <button onClick={endSubmissions}>End Submissions Now</button>
+        <button onClick={resetWeek} className="reset-week-button">Reset Week</button>
       </div>
       <div className="admin-section">
         <h4>Manage Absences</h4>

@@ -29,10 +29,11 @@ interface WeeklyPageProps {
   updateUserAbsence: (userId: string, isAbsent: boolean) => void;
   absentUsers: string[];
   resetUserVote: (userId: string) => Promise<void>;
+  resetWeek: () => void;
 }
 
 export default function WeeklyPage({
-  movies, submittedVotes, tieBreakerUser, onAddMovie, onScrapMovie, onAddRating, onRemoveRating, onSubmitVotes, onEndWeek, currentUser, setCurrentUser, submissionDeadline, setSubmissionDeadline, areSubmissionsComplete, endSubmissions, isKcAuthenticated, authenticateKc, winner, pickWinner, updateUserAbsence, absentUsers, resetUserVote,
+  movies, submittedVotes, tieBreakerUser, onAddMovie, onScrapMovie, onAddRating, onRemoveRating, onSubmitVotes, onEndWeek, currentUser, setCurrentUser, submissionDeadline, setSubmissionDeadline, areSubmissionsComplete, endSubmissions, isKcAuthenticated, authenticateKc, winner, pickWinner, updateUserAbsence, absentUsers, resetUserVote, resetWeek,
 }: WeeklyPageProps) {
   const [movieNightDate, setMovieNightDate] = useState(new Date().toISOString().split('T')[0]);
 
@@ -76,6 +77,28 @@ export default function WeeklyPage({
     onEndWeek(movieNightDate);
   };
 
+  if (!currentUser) {
+    return (
+      <div className="weekly-page-container">
+        <div className="landing-user-selection">
+          <h2>Welcome to Harvey Movie Night!</h2>
+          <p>Please select who you are to continue:</p>
+          <select 
+            id="landing-user-select" 
+            value={currentUser} 
+            onChange={handleUserChange}
+            className="large-user-select"
+          >
+            <option value="">Select a user...</option>
+            {Object.entries(USERS).map(([id, user]) => (
+              <option key={id} value={id}>{user.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="weekly-page-container">
       <div className="user-selection-area">
@@ -95,6 +118,7 @@ export default function WeeklyPage({
           absentUsers={absentUsers}
           resetUserVote={resetUserVote}
           submittedVotes={submittedVotes}
+          resetWeek={resetWeek}
         />
       )}
 
