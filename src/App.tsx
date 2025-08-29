@@ -195,7 +195,11 @@ function App() {
   };
 
   const pickWinner = async () => {
-    if (appState.currentMovies.length === 0) return;
+    console.log('pickWinner function called!');
+    if (appState.currentMovies.length === 0) {
+      console.log('No movies found, returning early');
+      return;
+    }
     
     let winner: Movie | undefined;
     let tieBreakerName: string | null = null;
