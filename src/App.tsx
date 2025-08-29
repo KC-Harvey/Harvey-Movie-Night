@@ -196,24 +196,36 @@ function App() {
     let tieBreakerName: string | null = null;
     const sortedMovies = [...appState.currentMovies].sort((a, b) => b.averageRating - a.averageRating);
     const topScore = sortedMovies[0]?.averageRating;
-    const potentialWinners = sortedMovies.filter(m => m.averageRating === topScore);
+    
+    // Use a small epsilon for floating point comparison to handle precision issues
+    const epsilon = 0.000001;
+    const potentialWinners = sortedMovies.filter(m => Math.abs(m.averageRating - topScore) < epsilon);
 
-    if (potentialWinners.length > 1 && typeof topScore === 'number' && topScore > 0) {
+    console.log(`Top score: ${topScore}, Potential winners: ${potentialWinners.length}`, potentialWinners.map(m => ({ title: m.title, score: m.averageRating })));
+
+    if (potentialWinners.length > 1 && typeof topScore === 'number') {
       const primaryVoters = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5'].filter(id => !appState.absentUsers.includes(id));
       if (primaryVoters.length > 0) {
         const tieBreakerId = primaryVoters[Math.floor(Math.random() * primaryVoters.length)];
         tieBreakerName = USERS[tieBreakerId].name;
+        console.log(`Tie detected! Using ${tieBreakerName} as tiebreaker`);
+        
         const sortedByTieBreaker = potentialWinners.sort((a, b) => {
           const voteA = a.ratings[tieBreakerId] || 0;
           const voteB = b.ratings[tieBreakerId] || 0;
+          console.log(`${a.title}: ${voteA}, ${b.title}: ${voteB}`);
           return voteB - voteA;
         });
         winner = sortedByTieBreaker[0];
+        console.log(`Winner after tiebreaker: ${winner.title}`);
       } else {
         winner = potentialWinners[Math.floor(Math.random() * potentialWinners.length)];
+        tieBreakerName = "Random Selection";
+        console.log(`No primary voters available, random winner: ${winner.title}`);
       }
     } else {
       winner = sortedMovies[0];
+      console.log(`Clear winner: ${winner?.title}`);
     }
 
     if (winner) {
