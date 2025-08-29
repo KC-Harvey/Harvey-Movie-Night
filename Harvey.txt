@@ -1,0 +1,3 @@
+1. Add a section to put where people can find the movie to watch
+2. make the user blank by default
+3. add a time that the winner is announced

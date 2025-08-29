@@ -29,6 +29,7 @@ export default function AdminControls({ setSubmissionDeadline, endSubmissions, u
     }
   };
 
+
   return (
     <div className="admin-controls">
       <h3>Admin Controls</h3>

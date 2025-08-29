@@ -173,6 +173,7 @@ function App() {
     return false;
   };
 
+
   const setSubmissionDeadline = async (deadline: string) => {
     await updateWeeklyState({ submission_deadline: deadline });
   };
@@ -352,9 +353,10 @@ function App() {
   };
 
   // Add the resetUserVote function
-  const resetUserVote = async (movieId: string) => {
-    // Remove the current user's rating for the specified movie
-    await removeRating(movieId);
+  const resetUserVote = async (userId: string) => {
+    // Remove the specified user from submittedVotes array so they can vote again
+    const updatedSubmittedVotes = appState.submittedVotes.filter(id => id !== userId);
+    await updateWeeklyState({ submitted_votes: updatedSubmittedVotes });
   };
 
   return (
