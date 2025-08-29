@@ -81,6 +81,9 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
             </div>
           )}
           
+          {/* Debug info */}
+          {console.log('MovieList render - winner:', winner?.title, 'tieBreakerUser:', tieBreakerUser)}
+          
           {!hasUserSubmittedVotes && sortedMovies.map((movie, index) => (
             <MovieItem
               key={movie.id}

@@ -148,14 +148,19 @@ function App() {
 
 
   const updateWeeklyState = async (newState: object) => {
-    const { error } = await supabase
+    console.log('Updating weekly state with:', newState);
+    const { data, error } = await supabase
       .from('weekly_state')
       .update(newState)
-      .eq('id', 1);
+      .eq('id', 1)
+      .select();
     if (error) {
       console.error('Error updating weekly state:', error);
       alert('There was an error saving the state.');
+    } else {
+      console.log('Weekly state updated successfully:', data);
     }
+    return { data, error };
   };
 
   const updateUserAbsence = async (userId: string, isAbsent: boolean) => {
@@ -229,7 +234,9 @@ function App() {
     }
 
     if (winner) {
-        await updateWeeklyState({ winner_id: winner.id, tie_breaker_user: tieBreakerName });
+        console.log(`Saving winner: ${winner.title}, tiebreaker: ${tieBreakerName}`);
+        const updateResult = await updateWeeklyState({ winner_id: winner.id, tie_breaker_user: tieBreakerName });
+        console.log('Update result:', updateResult);
     }
   };
 
