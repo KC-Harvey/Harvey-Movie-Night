@@ -50,7 +50,7 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
 
         <div className="rating-container">
           <div className="rating-buttons">
-            {Array.from({ length: numberOfMovies }, (_, i) => i + 1).map((ratingValue) => {
+            {Array.from({ length: numberOfMovies }, (_, i) => numberOfMovies - i).map((ratingValue) => {
               const isVotedByUser = currentUserVoteForThisMovie === ratingValue;
               const isRatingUsedElsewhere = userVotes.includes(ratingValue) && !isVotedByUser;
               const buttonClass = isVotedByUser ? 'voted-by-user' : '';

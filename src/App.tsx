@@ -203,16 +203,16 @@ function App() {
     
     let winner: Movie | undefined;
     let tieBreakerName: string | null = null;
-    const sortedMovies = [...appState.currentMovies].sort((a, b) => b.averageRating - a.averageRating);
-    const topScore = sortedMovies[0]?.averageRating;
+    const sortedMovies = [...appState.currentMovies].sort((a, b) => a.averageRating - b.averageRating);
+    const lowestScore = sortedMovies[0]?.averageRating;
     
     // Use a small epsilon for floating point comparison to handle precision issues
     const epsilon = 0.000001;
-    const potentialWinners = sortedMovies.filter(m => Math.abs(m.averageRating - topScore) < epsilon);
+    const potentialWinners = sortedMovies.filter(m => Math.abs(m.averageRating - lowestScore) < epsilon);
 
-    console.log(`Top score: ${topScore}, Potential winners: ${potentialWinners.length}`, potentialWinners.map(m => ({ title: m.title, score: m.averageRating })));
+    console.log(`Lowest score: ${lowestScore}, Potential winners: ${potentialWinners.length}`, potentialWinners.map(m => ({ title: m.title, score: m.averageRating })));
 
-    if (potentialWinners.length > 1 && typeof topScore === 'number') {
+    if (potentialWinners.length > 1 && typeof lowestScore === 'number') {
       const primaryVoters = ['user-1', 'user-2', 'user-3', 'user-4', 'user-5'].filter(id => !appState.absentUsers.includes(id));
       if (primaryVoters.length > 0) {
         const tieBreakerId = primaryVoters[Math.floor(Math.random() * primaryVoters.length)];
@@ -220,10 +220,10 @@ function App() {
         console.log(`Tie detected! Using ${tieBreakerName} as tiebreaker`);
         
         const sortedByTieBreaker = potentialWinners.sort((a, b) => {
-          const voteA = a.ratings[tieBreakerId] || 0;
-          const voteB = b.ratings[tieBreakerId] || 0;
+          const voteA = a.ratings[tieBreakerId] || 999; // Use high number as default for missing votes
+          const voteB = b.ratings[tieBreakerId] || 999; // Use high number as default for missing votes
           console.log(`${a.title}: ${voteA}, ${b.title}: ${voteB}`);
-          return voteB - voteA;
+          return voteA - voteB; // Sort ascending (lowest first)
         });
         winner = sortedByTieBreaker[0];
         console.log(`Winner after tiebreaker: ${winner.title}`);

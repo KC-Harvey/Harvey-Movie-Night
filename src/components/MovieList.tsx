@@ -27,8 +27,8 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
   const pendingVoters = activePrimaryUsers.filter(id => !submittedVotes.includes(id));
 
   const sortedMovies = [...movies].sort((a, b) => {
-    if (winner || areAllVotesSubmitted) {
-      return b.averageRating - a.averageRating;
+    if (winner) {
+      return a.averageRating - b.averageRating; // Sort ascending (lowest first)
     }
     if (areSubmissionsComplete) {
       return a.title.localeCompare(b.title);
@@ -93,7 +93,7 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
               areSubmissionsComplete={areSubmissionsComplete}
               areAllVotesSubmitted={areAllVotesSubmitted}
               hasUserSubmittedVotes={hasUserSubmittedVotes}
-              rank={winner ? (winner.id === movie.id ? 1 : undefined) : (areAllVotesSubmitted ? index + 1 : undefined)}
+              rank={winner ? (winner.id === movie.id ? 1 : undefined) : undefined}
               numberOfMovies={movies.length}
             />
           ))}
@@ -109,7 +109,7 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
               areSubmissionsComplete={areSubmissionsComplete}
               areAllVotesSubmitted={areAllVotesSubmitted}
               hasUserSubmittedVotes={hasUserSubmittedVotes}
-              rank={winner ? (winner.id === movie.id ? 1 : undefined) : (areAllVotesSubmitted ? index + 1 : undefined)}
+              rank={winner ? (winner.id === movie.id ? 1 : undefined) : undefined}
               numberOfMovies={movies.length}
             />
           ))}
