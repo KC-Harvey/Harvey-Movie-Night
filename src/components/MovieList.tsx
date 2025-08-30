@@ -82,7 +82,7 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
           )}
           
           
-          {!hasUserSubmittedVotes && sortedMovies.map((movie, index) => (
+          {!hasUserSubmittedVotes && sortedMovies.map((movie) => (
             <MovieItem
               key={movie.id}
               movie={movie}
@@ -98,7 +98,7 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
             />
           ))}
           
-          {hasUserSubmittedVotes && areAllVotesSubmitted && sortedMovies.map((movie, index) => (
+          {hasUserSubmittedVotes && areAllVotesSubmitted && sortedMovies.map((movie) => (
             <MovieItem
               key={movie.id}
               movie={movie}
