@@ -375,11 +375,63 @@ function App() {
       }
   };
 
+  const refetchAllMovies = async () => {
+    const { data: movies, error: moviesError } = await supabase
+      .from('movies')
+      .select('*, ratings(*)')
+      .is('archived_week_id', null);
+
+    if (moviesError) {
+      console.error('Error refetching movies:', moviesError);
+      return;
+    }
+
+    const processedMovies: Movie[] = movies.map((movie: any) => {
+      const ratings: UserVote = {};
+      let totalRating = 0;
+      movie.ratings.forEach((r: any) => {
+        ratings[r.user_id] = r.rating;
+        totalRating += r.rating;
+      });
+      const averageRating = movie.ratings.length > 0 ? totalRating / movie.ratings.length : 0;
+      return {
+        ...movie,
+        trailerLink: movie.trailer_link,
+        submittedBy: movie.submitted_by,
+        ratings,
+        averageRating,
+      };
+    });
+
+    // Update average ratings in database
+    for (const movie of processedMovies) {
+      await supabase.from('movies').update({ average_rating: movie.averageRating }).eq('id', movie.id);
+    }
+
+    setAppState(prevState => ({ ...prevState, currentMovies: processedMovies }));
+  };
+
   // Add the resetUserVote function
   const resetUserVote = async (userId: string) => {
+    // Remove all ratings for this user
+    const { error: deleteError } = await supabase.from('ratings').delete().eq('user_id', userId);
+    if (deleteError) {
+      console.error('Error deleting user ratings:', deleteError);
+      return;
+    }
+
     // Remove the specified user from submittedVotes array so they can vote again
     const updatedSubmittedVotes = appState.submittedVotes.filter(id => id !== userId);
-    await updateWeeklyState({ submitted_votes: updatedSubmittedVotes });
+    
+    // Refetch all movies to update their scores
+    await refetchAllMovies();
+    
+    // Clear winner state since votes have changed
+    await updateWeeklyState({ 
+      submitted_votes: updatedSubmittedVotes,
+      winner: null,
+      tie_breaker_user: null
+    });
   };
 
   return (
