@@ -17,7 +17,7 @@ interface MovieListProps {
   activePrimaryUsers: string[];
 }
 
-export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAddRating, onRemoveRating, onSubmitVotes, currentUser, areSubmissionsComplete, areAllVotesSubmitted, winner, absentUsers, activePrimaryUsers }: MovieListProps) {
+export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAddRating, onRemoveRating, onSubmitVotes, currentUser, areSubmissionsComplete, winner, absentUsers, activePrimaryUsers }: MovieListProps) {
   const userVotes = movies.map(movie => movie.ratings[currentUser]).filter(Boolean);
   const allUserIds = Object.keys(USERS);
 
