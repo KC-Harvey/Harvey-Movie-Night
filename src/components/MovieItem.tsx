@@ -11,9 +11,10 @@ interface MovieItemProps {
   hasUserSubmittedVotes: boolean;
   rank?: number;
   numberOfMovies: number;
+  showFinalScores: boolean;
 }
 
-export default function MovieItem({ movie, onAddRating, onRemoveRating, currentUser, userVotes, areSubmissionsComplete, hasUserSubmittedVotes, rank, numberOfMovies }: MovieItemProps) {
+export default function MovieItem({ movie, onAddRating, onRemoveRating, currentUser, userVotes, areSubmissionsComplete, hasUserSubmittedVotes, rank, numberOfMovies, showFinalScores }: MovieItemProps) {
   const currentUserVoteForThisMovie = movie.ratings[currentUser];
 
   const handleVoteClick = (rating: number) => {
@@ -34,12 +35,12 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
       </div>
       
       {/* --- This is the corrected line --- */}
-      {(!areSubmissionsComplete || rank) && <p>Submitted by: <strong>{USERS[movie.submittedBy]?.name || 'Unknown'}</strong></p>}
+      {(!areSubmissionsComplete || showFinalScores) && <p>Submitted by: <strong>{USERS[movie.submittedBy]?.name || 'Unknown'}</strong></p>}
       
       {movie.trailerLink && <a href={movie.trailerLink} target="_blank" rel="noopener noreferrer">Watch Trailer</a>}
       
       <div className="rating">
-        {rank ? (
+        {showFinalScores ? (
            <p>Final Score: {movie.averageRating.toFixed(1)}</p>
         ) : (
           <p className="locked-average">

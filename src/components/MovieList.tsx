@@ -98,6 +98,7 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
               hasUserSubmittedVotes={hasUserSubmittedVotes}
               rank={winner ? (winner.id === movie.id ? 1 : undefined) : undefined}
               numberOfMovies={movies.length}
+              showFinalScores={false}
             />
           ))}
           
@@ -113,6 +114,7 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
               hasUserSubmittedVotes={hasUserSubmittedVotes}
               rank={winner ? (winner.id === movie.id ? 1 : undefined) : undefined}
               numberOfMovies={movies.length}
+              showFinalScores={true}
             />
           ))}
         </>
