@@ -429,7 +429,7 @@ function App() {
     // Clear winner state since votes have changed
     await updateWeeklyState({ 
       submitted_votes: updatedSubmittedVotes,
-      winner: null,
+      winner_id: null,
       tie_breaker_user: null
     });
   };
