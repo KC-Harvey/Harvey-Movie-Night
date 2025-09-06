@@ -40,7 +40,7 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
       {movie.trailerLink && <a href={movie.trailerLink} target="_blank" rel="noopener noreferrer">Watch Trailer</a>}
       
       <div className="rating">
-        {areAllVotesSubmitted ? (
+        {rank ? (
            <p>Final Score: {movie.averageRating.toFixed(1)}</p>
         ) : (
           <p className="locked-average">

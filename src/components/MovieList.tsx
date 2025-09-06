@@ -62,9 +62,13 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
             {hasUserSubmittedVotes ? (
               <>
                 <p className="votes-submitted-message">✅ Your votes are locked in!</p>
-                {pendingVoters.length > 0 && (
+                {pendingVoters.length > 0 ? (
                   <div className="pending-voters-list">
                     Waiting for: {pendingVoters.map(id => USERS[id].name).join(', ')}
+                  </div>
+                ) : (
+                  <div className="pending-voters-list">
+                    Everyone has voted
                   </div>
                 )}
               </>
@@ -98,7 +102,7 @@ export default function MovieList({ movies, submittedVotes, tieBreakerUser, onAd
             />
           ))}
           
-          {hasUserSubmittedVotes && areAllVotesSubmitted && sortedMovies.map((movie) => (
+          {hasUserSubmittedVotes && winner && sortedMovies.map((movie) => (
             <MovieItem
               key={movie.id}
               movie={movie}
