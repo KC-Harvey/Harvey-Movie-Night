@@ -394,6 +394,13 @@ function App() {
         totalRating += r.rating;
       });
       const averageRating = movie.ratings.length > 0 ? totalRating / movie.ratings.length : 0;
+      
+      // Debug logging
+      console.log(`Movie: ${movie.title}`);
+      console.log(`Ratings: ${movie.ratings.map((r: any) => `${r.user_id}:${r.rating}`).join(', ')}`);
+      console.log(`Total: ${totalRating}, Count: ${movie.ratings.length}, Calculated Average: ${averageRating}`);
+      console.log(`DB Average: ${movie.average_rating}`);
+      
       return {
         ...movie,
         trailerLink: movie.trailer_link,
