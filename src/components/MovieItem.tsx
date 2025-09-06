@@ -8,13 +8,12 @@ interface MovieItemProps {
   currentUser: string;
   userVotes: number[];
   areSubmissionsComplete: boolean;
-  areAllVotesSubmitted: boolean;
   hasUserSubmittedVotes: boolean;
   rank?: number;
   numberOfMovies: number;
 }
 
-export default function MovieItem({ movie, onAddRating, onRemoveRating, currentUser, userVotes, areSubmissionsComplete, areAllVotesSubmitted, hasUserSubmittedVotes, rank, numberOfMovies }: MovieItemProps) {
+export default function MovieItem({ movie, onAddRating, onRemoveRating, currentUser, userVotes, areSubmissionsComplete, hasUserSubmittedVotes, rank, numberOfMovies }: MovieItemProps) {
   const currentUserVoteForThisMovie = movie.ratings[currentUser];
 
   const handleVoteClick = (rating: number) => {
