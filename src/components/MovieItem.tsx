@@ -35,7 +35,7 @@ export default function MovieItem({ movie, onAddRating, onRemoveRating, currentU
       </div>
       
       {/* --- This is the corrected line --- */}
-      {(!areSubmissionsComplete || areAllVotesSubmitted) && <p>Submitted by: <strong>{USERS[movie.submittedBy]?.name || 'Unknown'}</strong></p>}
+      {(!areSubmissionsComplete || rank) && <p>Submitted by: <strong>{USERS[movie.submittedBy]?.name || 'Unknown'}</strong></p>}
       
       {movie.trailerLink && <a href={movie.trailerLink} target="_blank" rel="noopener noreferrer">Watch Trailer</a>}
       
